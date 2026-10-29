@@ -29,7 +29,7 @@ for parcellation in parcellations:
                 print(new_atlas_path)
                 ref = image.load_img(ref_path)
                 new_atlas = image.resample_to_img(source, ref, interpolation = 'nearest')
-                new_atlas.to_filename()
+                new_atlas.to_filename(new_atlas_path)
 
 
         
