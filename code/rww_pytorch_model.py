@@ -1083,10 +1083,10 @@ class Model_fitting:
             fc_sim = np.corrcoef(ts_sim[:, 10:])
 
             #debugging
-            with open('../temp/ts_sim.pkl', 'wb') as f:  # open a text file
-                pickle.dump(ts_sim, f) # serialize the list
-            with open('../temp/tmp_ls.pkl', 'wb') as f:  # open a text file
-                pickle.dump(tmp_ls, f) # serialize the list
+            #with open('../temp/ts_sim.pkl', 'wb') as f:  # open a text file
+            #    pickle.dump(ts_sim, f) # serialize the list
+            #with open('../temp/tmp_ls.pkl', 'wb') as f:  # open a text file
+            #    pickle.dump(tmp_ls, f) # serialize the list
 
             print('epoch: ', i_epoch, loss.detach().numpy())
 
