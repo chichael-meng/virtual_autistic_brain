@@ -225,7 +225,7 @@ class RNNJANSEN(torch.nn.Module):
         self.input_size = input_size  # 1 or 2 or 3
         self.tr = tr  # tr ms (integration step 0.1 ms)
         self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.1 ms
-        self.hidden_size = np.int(tr / step_size)
+        self.hidden_size = int(tr / step_size) #np.int is apparently deprecated
         self.batch_size = batch_size  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
         self.output_size = output_size  # num of EEG channels
@@ -615,7 +615,7 @@ class RNNWWD(torch.nn.Module):
         self.input_size = input_size  # 1 or 2
         self.tr = tr  # tr fMRI image
         self.step_size = torch.tensor(step_size, dtype=torch.float32)  # integration step 0.05
-        self.hidden_size = np.int(tr / step_size)
+        self.hidden_size = int(tr / step_size) #np.int is apparently deprecated
         self.batch_size = batch_size  # size of the batch used at each step
         self.node_size = node_size  # num of ROI
         self.sc = sc  # matrix node_size x node_size structure connectivity
@@ -940,7 +940,7 @@ class Model_fitting:
         con_1 = torch.tensor(1.0, dtype=torch.float32)
 
         # define num_batches
-        num_batches = np.int(self.ts.shape[2] / self.model.batch_size)
+        num_batches = int(self.ts.shape[2] / self.model.batch_size)
         
         loss_pre = 1000
         for i_epoch in range(self.num_epoches):
@@ -1082,6 +1082,12 @@ class Model_fitting:
             ts_sim = np.concatenate(tmp_ls, axis=1)
             fc_sim = np.corrcoef(ts_sim[:, 10:])
 
+            #debugging
+            with open('../temp/ts_sim.pkl', 'wb') as f:  # open a text file
+                pickle.dump(ts_sim, f) # serialize the list
+            with open('../temp/tmp_ls.pkl', 'wb') as f:  # open a text file
+                pickle.dump(tmp_ls, f) # serialize the list
+
             print('epoch: ', i_epoch, loss.detach().numpy())
 
             print('epoch: ', i_epoch, np.corrcoef(fc_sim[mask_e], fc[mask_e])[0, 1], 'cos_sim: ',
@@ -1144,7 +1150,7 @@ class Model_fitting:
         mask_e = np.tril_indices(self.model.output_size, -1)
 
         # define num_batches
-        num_batches = np.int(self.ts.shape[2] / self.model.batch_size) + base_batch_num
+        num_batches = int(self.ts.shape[2] / self.model.batch_size) + base_batch_num
         # Create placeholders for the simulated BOLD E I x f and q of entire time series.
         for name in self.model.state_names + [self.output_sim.output_name]:
             setattr(self.output_sim, name + '_test', [])
